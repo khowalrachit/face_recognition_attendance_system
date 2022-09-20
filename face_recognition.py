@@ -98,7 +98,7 @@ while True:
 		# Draw rectangle in the original image
 		cv2.putText(frame, names[int(out)],(x,y-10), cv2.FONT_HERSHEY_SIMPLEX, 1,(255,0,0),2,cv2.LINE_AA)
 		cv2.rectangle(frame, (x,y), (x+w,y+h), (255,255,255), 2)
-		attendance(names)
+		attendance(names[int(out)])
 
 	cv2.imshow("Faces", frame)
 
