@@ -1,8 +1,20 @@
+from ast import Not
 import datetime
+from operator import not_
+import time
 import numpy as np
 import cv2
 import os
-
+import csv
+import pandas as pd
+################################
+file = open("attendance.csv","w")
+fields = ['Name', 'Time', 'Date']
+filename = "attendance.csv"
+with open(filename, 'w') as csvfile:  
+    csvwriter = csv.writer(csvfile) 
+    csvwriter.writerow(fields)
+file.close()
 ########## KNN CODE ############
 def distance(v1, v2):
 	# Eucledian 
@@ -33,13 +45,13 @@ def knn(train, test, k=5):
 def attendance(names):
 	with open('attendance.csv','r+') as f:
 		myDatalist = f.readlines()
-		nameList =[]
+		nameList = []
 
 		if names not in nameList:
 			time_now = datetime.datetime.now()
 			tStr = time_now.strftime('%H:%M:%S')
 			dStr = time_now.strftime('%D')
-			f.writelines(f'{names},{tStr},{dStr}')
+			f.writelines(f'\n{names},{tStr},{dStr}')
 
 
 ################################
@@ -99,10 +111,12 @@ while True:
 		cv2.putText(frame, names[int(out)],(x,y-10), cv2.FONT_HERSHEY_SIMPLEX, 1,(255,0,0),2,cv2.LINE_AA)
 		cv2.rectangle(frame, (x,y), (x+w,y+h), (255,255,255), 2)
 		attendance(names[int(out)])
+		
 
 	cv2.imshow("Faces", frame)
 
 	if cv2.waitKey(1) & 0xFF == ord('q'):
+		os.rename("attendance.csv", time.strftime("attendance_%H-%M-%S.csv"))
 		break
 
 cap.release()
